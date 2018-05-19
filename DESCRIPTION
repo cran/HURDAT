@@ -1,7 +1,7 @@
 Package: HURDAT
 Type: Package
 Title: Hurricane Re-Analysis Project
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")), 
     person("Chris", "Landsea", email = "Chris.Landsea@noaa.gov", 
@@ -16,16 +16,15 @@ URL: https://github.com/timtrice/HURDAT
 BugReports: https://github.com/timtrice/HURDAT/issues
 License: MIT + file LICENSE
 LazyData: TRUE
-Imports: dplyr (>= 0.5.0), lubridate (>= 1.6.0), magrittr (>= 1.5),
-        purrr (>= 0.2.2), readr (>= 1.1.0), stringr (>= 1.2.0), tibble
-        (>= 1.2), tidyr (>= 0.6.2)
+Imports: dplyr, lubridate, magrittr, purrr, readr, stringr, tibble,
+        tidyr
 Suggests: devtools, knitr, testthat, rmarkdown
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2017-05-15 16:57:41 UTC; timtrice
+Packaged: 2018-05-19 16:29:01 UTC; rstudio
 Author: Tim Trice [aut, cre],
   Chris Landsea [aut, dtc]
 Maintainer: Tim Trice <tim.trice@gmail.com>
 Repository: CRAN
-Date/Publication: 2017-05-15 17:36:47 UTC
+Date/Publication: 2018-05-19 16:45:06 UTC
