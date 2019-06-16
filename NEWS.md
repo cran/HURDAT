@@ -1,4 +1,23 @@
-# HURDAT v0.2.0 (yyyy-mm-dd)
+# HURDAT v0.2.1 (2019-06-16)
+==========================
+
+## NEW FEATURES
+
+* NA
+
+## MINOR IMPROVEMENTS
+
+* `AL` dataset updated for 2018 cyclones
+
+## BUG FIXES
+
+* NA
+
+## DEPRECATED AND DEFUNCT
+
+* NA
+
+# HURDAT v0.2.0 (2018-05-20)
 ==========================
 
 ## NEW FEATURES
