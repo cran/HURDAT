@@ -7,12 +7,13 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="author" content="Tim Trice" />
 
-<meta name="date" content="2019-06-16" />
+<meta name="date" content="2019-07-13" />
 
 <title>Raw HURDAT</title>
 
@@ -96,7 +97,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -303,7 +304,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Raw HURDAT</h1>
 <h4 class="author">Tim Trice</h4>
-<h4 class="date">2019-06-16</h4>
+<h4 class="date">2019-07-13</h4>
 
 
 
@@ -311,9 +312,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>Introduction</h2>
 <p>HURDAT is a re-analysis project of all tropical cyclones by the National Hurricane Center (NHC) Hurricane Research Division(NRD). Known as HURDAT2, the text files are typically updated in late winter, early spring to include the previous season’s activity. These text files <em>will not</em> contain data on current tropical systems. For that I would recommend my <a href="https://github.com/timtrice/Hurricanes">Hurricanes</a> package (not yet available in CRAN).</p>
 <p>As of this vignette data up to and including 2016 has been added.</p>
-<p>There are two core datasets available: one for the Atlantic (“AL”) basin (northern hemisphere) and Pacific basin (northwestern hemisphere). The Pacific basin is dividied into two sections: east Pacific and central Pacific. However, both sections are included in the “EP” dataset.</p>
+<p>There are two core datasets available: one for the Atlantic (“AL”) basin (northern hemisphere) and Pacific basin (northwestern hemisphere). The Pacific basin is divided into two sections: east Pacific and central Pacific. However, both sections are included in the “EP” dataset.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">str</span>(EP)</a></code></pre></div>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    27721 obs. of  21 variables:
+<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    28547 obs. of  21 variables:
 ##  $ Key     : chr  &quot;EP011949&quot; &quot;EP011949&quot; &quot;EP011949&quot; &quot;EP011949&quot; ...
 ##  $ Name    : chr  &quot;UNNAMED&quot; &quot;UNNAMED&quot; &quot;UNNAMED&quot; &quot;UNNAMED&quot; ...
 ##  $ DateTime: POSIXct, format: &quot;1949-06-11 00:00:00&quot; &quot;1949-06-11 06:00:00&quot; ...
@@ -361,7 +362,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
-<p>The datasets are extracted from online with the function <code>get_hurdat</code>. The <code>basin</code> parameter takes either “AL” for Atlantic or “EP” for northesatern and central Pacific.</p>
+<p>The datasets are extracted from online with the function <code>get_hurdat</code>. The <code>basin</code> parameter takes either “AL” for Atlantic or “EP” for northeastern and central Pacific.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">AL &lt;-<span class="st"> </span><span class="kw">get_hurdat</span>(<span class="dt">basin =</span> <span class="st">&quot;AL&quot;</span>)</a></code></pre></div>
 <p><code>get_basin</code> does not require <code>basin</code> be provided; by default it will access both datasets and return a dataframe approximately 80,000 x 21.</p>
 <p>Most of the early storms will have missing data.</p>
@@ -374,6 +375,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>Regardless, if you find anything that is incorrect (either on my end or in the original dataset), please submit <a href="https://github.com/timtrice/HURDAT/issues">an issue</a> and I will review it.</p>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
