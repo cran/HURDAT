@@ -5,7 +5,7 @@
 #' cyclones and present it in a cleaner format.
 #'
 #' The Atlantic basin dataset covers all cyclones that have developed in the
-#' Atlantic Ocean. The eastern Pacific datasets cover cyclones in the Pacifc
+#' Atlantic Ocean. The eastern Pacific datasets cover cyclones in the Pacific
 #' from the United States/Mexico coastlines to -140&deg;W where the cyclone
 #' entered what is referred to as the central Pacific basin. The central
 #' Pacific basin extends westward to -180&deg;W.
@@ -18,7 +18,8 @@
 #' In 1953, the \href{http://www.nhc.noaa.gov}{National Hurricane Center} began
 #' using female names and by 1954 the NHC would retire some names for storms of
 #' significance. Currently the
-#' \href{http://www.wmo.int/pages/prog/www/tcp/Storm-naming.html}{World Meteorological Organization}
+#' \href{http://www.wmo.int/pages/prog/www/tcp/Storm-naming.html}{World
+#'   Meteorological Organization}
 #' is responsible for maintaining the list of names, retiring names and
 #' assigning replacement names.
 #'
@@ -39,15 +40,25 @@
 #' It is useful to understand definitions and classifications of tropical
 #' cyclones.
 #' \itemize{
-#'   \item Cyclone: a system of winds rotating inward to an area of low pressure. This system rotates counter-clockwise in the northern hemisphere and clockwise in the southern hemisphere.
-#'   \item Tropical depression: a tropical cyclone with winds less than 35 mph (34 kts).
-#'   \item Tropical storm: a tropical  with winds between 35 mph (34 kts) but less than 74mph (64 kts).
-#'   \item Hurricane: a tropical cyclone with winds greater than 74 mph (64 kts).
-#'   \item Extratropical Cyclone: a cyclone no longer containing tropical characteristics (warm-core center, tight pressure gradient near the center)
-#'   \item Subtropical Cyclone: a cyclone containing a mix of tropical and non-tropical characteristics.
+#'   \item Cyclone: a system of winds rotating inward to an area of low
+#'     pressure. This system rotates counter-clockwise in the northern
+#'     hemisphere and clockwise in the southern hemisphere.
+#'   \item Tropical depression: a tropical cyclone with winds less than 35 mph
+#'     (34 kts).
+#'   \item Tropical storm: a tropical  with winds between 35 mph (34 kts) but
+#'     less than 74mph (64 kts).
+#'   \item Hurricane: a tropical cyclone with winds greater than 74 mph
+#'     (64 kts).
+#'   \item Extratropical Cyclone: a cyclone no longer containing tropical
+#'     characteristics (warm-core center, tight pressure gradient near the
+#'    center)
+#'   \item Subtropical Cyclone: a cyclone containing a mix of tropical and
+#'     non-tropical characteristics.
 #'   \item Tropical cyclone: a warm-core surface low pressure system
-#'   \item Tropical Wave: An open area of low pressure (trough) containing tropical characteristics
-#'   \item Disturbance: An area of disturbed weather; a large disorganized area of thunderstorms.
+#'   \item Tropical Wave: An open area of low pressure (trough) containing
+#'     tropical characteristics
+#'   \item Disturbance: An area of disturbed weather; a large disorganized area
+#'     of thunderstorms.
 #' }
 #'
 #' @section Error Reporting:
@@ -57,56 +68,63 @@
 #'
 #' Errors in the raw data may also be reported to Chris Landsea or the National
 #' Hurricane Center Best Track Change Committee
-#' \href{http://www.aoml.noaa.gov/hrd/hurdat/submit_re-analysis.html}{as explained on the HRD website}.
+#' \href{http://www.aoml.noaa.gov/hrd/hurdat/submit_re-analysis.html}{as
+#'   explained on the HRD website}.
 #'
 #' @docType package
 #' @name HURDAT
 NULL
 
-if (getRversion() >= "3.2.2") {
-  utils::globalVariables(c(
-    "Key", "Name", "Year", "Month", "Date", "Hour",
-    "Minute", "DateTime", "LatHemi", "Lat", "LonHemi",
-    "Lon"
-  ))
+#' @importFrom rlang .data
+
+.onLoad <- function(libname, pkgname) {
+  op <- options()
+  op.hurdat <- list(
+    hurdat.url.al = "http://www.aoml.noaa.gov/hrd/hurdat/hurdat2.html",
+    hurdat.url.ep = "http://www.aoml.noaa.gov/hrd/hurdat/hurdat2-nepac.html"
+  )
+  toset <- !(names(op.hurdat) %in% names(op))
+  if (any(toset)) options(op.hurdat[toset])
+  invisible()
 }
 
-#' @importFrom magrittr %>%
-
-#' @importFrom stats complete.cases
-#' @export
-stats::complete.cases
-
-#' @title al_hurdat2
-#' @description URL for the Atlantic HURDAT2 file
-#' @source \url{http://www.nhc.noaa.gov/data/#hurdat}
+#' HURDAT audit
+#'
+#' Run an audit on the HURDAT dataset and identifies duplicate records of `Key`
+#'   and `DateTime`.
+#'
+#' @param df Dataframe, parsed HURDAT dataset
+#'
 #' @keywords internal
-al_hurdat2 <- function() {
-  url <- "http://www.aoml.noaa.gov/hrd/hurdat/hurdat2.html"
-  return(url)
+audit_hurdat <- function(df) {
+
+  problems <- dplyr::group_by(df, .data$Key, .data$DateTime)
+
+  problems <- dplyr::count(problems)
+
+  problems <- dplyr::filter(problems, .data$n > 1)
+
+  dplyr::arrange(problems, .data$n, .data$Key, .data$DateTime)
+
 }
 
-#' @title ep_hurdat2
-#' @description URL for the north east/central Pacific HURDAT2 file
-#' @source \url{http://www.nhc.noaa.gov/data/#hurdat}
-#' @keywords internal
-ep_hurdat2 <- function() {
-  url <- "http://www.aoml.noaa.gov/hrd/hurdat/hurdat2-nepac.html"
-  return(url)
-}
-
-#' @title get_hurdat
-#' @description Retrieve Raw HURDAT files for Atlantic (AL), northeast and
-#' central Pacific (EP) basins (northwestern hemisphere)
+#' Get HURDAT and parse to dataframe
+#'
+#' Retrieve Raw HURDAT files for Atlantic (AL), northeast and central Pacific
+#'   (EP) basins (northwestern hemisphere)
+#'
 #' @details Raw text files \emph{should} be found at
-#' \url{http://www.nhc.noaa.gov/data/hurdat/} as of this writing. The codebooks
-#' are listed below.
+#'   \url{http://www.nhc.noaa.gov/data/hurdat/} as of this writing. The
+#'  codebooks are listed below.
+#'
 #' @seealso Atlantic codebook:
 #'     \url{http://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atlantic.pdf}
+#'
 #' @seealso NE/NC Pacific codebook:
 #'     \url{http://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atlantic.pdf}
 #'
 #' @param basin AL or EP. Default is both.
+#'
 #' @examples
 #' \dontrun{
 #' # Get Atlantic storms
@@ -120,171 +138,175 @@ ep_hurdat2 <- function() {
 #' }
 #' @export
 get_hurdat <- function(basin = c("AL", "EP")) {
-  basin <- purrr::map_chr(basin, stringr::str_to_upper)
+
+  basin <- toupper(basin)
 
   if (!all(basin %in% c("AL", "EP"))) {
-    stop("Basin must be AL for EP")
+    rlang::abort(message = "`basin` must be 'AL' and/or 'EP'.")
   }
 
-  df <- purrr::map_df(.x = basin, .f = parse_hurdat)
+  # Get URLs for `basin`
+  urls <- unlist(
+    options()[paste0("hurdat.url.", tolower(basin))],
+    use.names = FALSE
+  )
 
-  return(df)
+  txt <- purrr::map(urls, readr::read_lines)
+
+  txt <- purrr::flatten_chr(txt)
+
+  keep_lines <- grep(
+    pattern = "^[[:alpha:]{2}[:digit:]{6}]|[[:digit:]]{8}",
+    x = txt
+  )
+
+  txt <- txt[keep_lines]
+
+  parse_hurdat(txt)
+
 }
 
-#' @title parse_hurdat
-#' @description Parse raw HURDAT files.
-#' @param basin character name of basin; c("AL", "EP")
+#' Parse HURDAT
+#'
+#' Take a vector of lines with raw HURDAT information and convert to a
+#'   dataframe object.
+#'
+#' @param x A character vector.
+#'
 #' @keywords internal
-parse_hurdat <- function(basin) {
-  if (!all(basin %in% c("AL", "EP"))) {
-    stop("Basin must be AL for EP")
-  }
+parse_hurdat <- function(x) {
 
-  url <- do.call(
-    what = paste(tolower(basin),
-      "hurdat2",
-      sep = "_"
-    ),
-    args = list()
-  )
+  hurdat <- as.data.frame(x, stringsAsFactors = FALSE)
 
-  # Expected rows of dataframe:
-  n <- length(readr::read_lines(file = url))
+  header_rows <- grep(pattern = "^[[:alpha:]]{2}[[:digit:]]{6}.+", x)
 
-  # Import dataset
-  data <- readr::read_lines(file = url) %>% tibble::enframe(name = NULL)
-
-  # If length of raw dataset and length of dataset import doesn't match; error
-  if (n != nrow(data)) {
-    stop("Unexpected length differences raw and extracted data")
-  }
-
-  # Remove all spaces; dataset is comma-delimited
-  df <- purrr::map_df(
-    .x = data,
-    .f = stringr::str_replace_all,
-    pattern = "[:blank:]",
-    replacement = ""
-  )
-
-  # Expected length of headers
-  m <- nrow(df[grep("^[[:upper:]]{2}", df$value), ])
-  # Expected nrow of final dataset
-  o <- n - m
-
-  # Split storm headers into variables
-  pattern <- "([:alnum:]{8}),([[:upper:]-]+),([:digit:]+),"
-  df <- tidyr::extract_(
-    data = df,
-    col = "value",
+  # Split header_rows into variables
+  hurdat <- tidyr::extract(
+    data = hurdat,
+    col = "x",
     into = c("Key", "Name", "Lines"),
-    regex = pattern,
+    regex = paste0(
+      "([:alpha:]{2}[:digit:]{6}),\\s+", # Key
+      "([[:upper:][:digit:]-]+)\\s*,\\s+",      # Name
+      "([:digit:]+),"          # Number of lines that follow
+    ),
     remove = FALSE,
     convert = TRUE
   )
 
+  # Fill headers down
+  hurdat <- tidyr::fill(data = hurdat, .data$Key, .data$Name, .data$Lines)
+
+  # Remove original header rows
+  hurdat <- hurdat[-header_rows,]
+
   # Split storm details into variables
-  df <- tidyr::separate_(
-    data = df,
-    col = "value",
+  hurdat <- tidyr::extract(
+    data = hurdat,
+    col = "x",
     into = c(
-      "Date", "Time", "Record", "Status", "Lat",
-      "Lon", "Wind", "Pressure", "NE34", "SE34",
-      "SW34", "NW34", "NE50", "SE50", "SW50",
-      "NW50", "NE64", "SE64", "SW64", "NW64", "D"
+      "Year",
+      "Month",
+      "Date",
+      "Hour",
+      "Minute",
+      "Record",
+      "Status",
+      "Lat",
+      "LatHemi",
+      "Lon",
+      "LonHemi",
+      "Wind",
+      "Pressure",
+      "NE34",
+      "SE34",
+      "SW34",
+      "NW34",
+      "NE50",
+      "SE50",
+      "SW50",
+      "NW50",
+      "NE64",
+      "SE64",
+      "SW64",
+      "NW64"
     ),
-    sep = ",",
+    regex = paste0(
+      "^([:digit:]{4})", # Year
+      "([:digit:]{2})", # Month
+      "([:digit:]{2}),\\s+", # Date
+      "([:digit:]{2})", # Hour
+      "([:digit:]{2}),\\s+", # Minute
+      "([:alpha:]*),\\s+", # Record
+      "([:alpha:]{2}),\\s+", # Status
+      "([:digit:]{1,2}\\.[:digit:]{1})", # Latitude
+      "([:alpha:]{1}),\\s+", # Hemisphere
+      "([:digit:]{1,3}\\.[:digit:]{1})", # Longitude
+      "([:alpha:]{1}),\\s+", # Hemisphere
+      "([[:digit:]-]+),\\s+", # Wind
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+),\\s+", #
+      "([[:digit:]-]+).*" #
+    ),
     remove = FALSE,
-    convert = TRUE,
-    extra = "merge",
-    fill = "right"
+    convert = TRUE
   )
 
-  # Drop "value"
-  df$value <- NULL
-  # Drop "Lines"
-  df$Lines <- NULL
-  # Drop "D"; this field only exists cause all lines in raw data end w/ comma
-  df$D <- NULL
-
-  # Bring Key, Name to left
-  df <- dplyr::select(df, Key, Name, dplyr::everything())
-
-  # Fill Key, Name
-  df <- tidyr::fill_(
-    data = df,
-    fill_cols = c("Key", "Name"),
-    .direction = "down"
+  hurdat <- dplyr::mutate(
+    .data = hurdat,
+    Lat = dplyr::if_else(
+      .data$LatHemi == "N", .data$Lat * 1, .data$Lat * -1
+    ),
+    Lon = dplyr::if_else(
+      .data$LonHemi == "E", .data$Lon * 1, .data$Lon * -1
+    )
   )
 
-  # Complete cases between Lat:NE64
-  df <- df[complete.cases(
-    df$Lat, df$Lon, df$Wind, df$Pressure,
-    df$NE34, df$SE34, df$SW34, df$NW34,
-    df$NE50, df$SE50, df$SW50, df$NW50,
-    df$NE64, df$SE64, df$SW64, df$NW64
-  ), ]
+  hurdat$DateTime <- paste(
+    paste(hurdat$Year, hurdat$Month, hurdat$Date, sep = "-"),
+    paste(hurdat$Hour, hurdat$Minute, "00", sep = ":"),
+    sep = " "
+  )
+
+  hurdat <- dplyr::select(
+    .data = hurdat,
+    .data$Key, .data$Name, .data$DateTime, .data$Record:.data$Lat,
+    .data$Lon, .data$Wind:.data$NW64
+  )
+
+  # Run audit and throw warning if any issues.
+  if (nrow(audit_hurdat(hurdat)) > 0) {
+    rlang::warn(
+      message = paste0(
+        "Observations received are not equal to those expected.",
+        "Run `audit_hurdat()` for discrepancy table."
+      )
+    )
+  }
 
   # Make certain values NA
-  df[df == ""] <- NA
-  df[df == "-99"] <- NA
-  df[df == "-999"] <- NA
+  # I do this before converting `DateTime` because if that field has already
+  # been converted then this cleaning will generate an error,
+  # >  character string is not in a standard unambiguous format
+  hurdat[hurdat == ""] <- NA
+  hurdat[hurdat == "0"] <- NA
+  hurdat[hurdat == -99] <- NA_integer_
+  hurdat[hurdat == -999] <- NA_integer_
 
-  # Add DateTime var
-  df <- tidyr::extract_(
-    data = df,
-    col = "Date",
-    into = c("Year", "Month", "Date"),
-    regex = "([:digit:]{4})([:digit:]{2})([:digit:]{2})"
-  ) %>%
-    tidyr::extract_(
-      col = "Time",
-      into = c("Hour", "Minute"),
-      regex = "([:digit:]{2})([:digit:]{2})"
-    ) %>%
-    dplyr::mutate(
-      DateTime = lubridate::ymd_hm(paste(paste(Year,
-        Month,
-        Date,
-        sep = "-"
-      ),
-      paste(Hour,
-        Minute,
-        sep = ":"
-      ),
-      sep = " "
-      )),
-      Year = NULL,
-      Month = NULL,
-      Date = NULL,
-      Hour = NULL,
-      Minute = NULL
-    ) %>%
-    dplyr::select(Key, Name, DateTime, dplyr::everything())
-
-  # Make Lat, Lon numeric; positive if in NE hemisphere, else negative
-  df <- tidyr::extract_(
-    data = df,
-    col = "Lat",
-    into = c("Lat", "LatHemi"),
-    regex = "([[:digit:]\\.]+)([:upper:])"
-  ) %>%
-    tidyr::extract_(
-      col = "Lon",
-      into = c("Lon", "LonHemi"),
-      regex = "([[:digit:]\\.]+)([:upper:])"
-    )
-
-  df$Lat <- as.numeric(df$Lat)
-  df$Lon <- as.numeric(df$Lon)
-
-  df <- dplyr::mutate(
-    .data = df,
-    Lat = ifelse(LatHemi == "N", Lat * 1, Lat * -1),
-    Lon = ifelse(LonHemi == "E", Lon * 1, Lon * -1),
-    LatHemi = NULL,
-    LonHemi = NULL
+  hurdat$DateTime <- as.POSIXct(
+    strptime(hurdat$DateTime, format = "%Y-%m-%d %H:%M:%S")
   )
 
-  return(df)
+  dplyr::arrange(hurdat, .data$DateTime, .data$Key)
+
 }

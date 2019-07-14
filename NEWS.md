@@ -1,3 +1,24 @@
+# HURDAT v0.2.3 (2019-07-14)
+==========================
+
+## NEW FEATURES
+
+* NA
+
+## MINOR IMPROVEMENTS
+
+* NA
+
+## BUG FIXES
+
+* Several storms duplicated in `EP` dataset due to regex pattern not capturing 
+  full potential of Name values. Pattern modified to accept digits and 
+  trailing spaces before the comma separator.
+
+## DEPRECATED AND DEFUNCT
+
+* NA
+
 # HURDAT v0.2.2 (2019-07-10)
 ==========================
 

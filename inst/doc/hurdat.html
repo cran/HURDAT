@@ -13,7 +13,7 @@
 
 <meta name="author" content="Tim Trice" />
 
-<meta name="date" content="2019-07-13" />
+<meta name="date" content="2019-07-14" />
 
 <title>Raw HURDAT</title>
 
@@ -304,7 +304,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Raw HURDAT</h1>
 <h4 class="author">Tim Trice</h4>
-<h4 class="date">2019-07-13</h4>
+<h4 class="date">2019-07-14</h4>
 
 
 
@@ -314,7 +314,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>As of this vignette data up to and including 2016 has been added.</p>
 <p>There are two core datasets available: one for the Atlantic (“AL”) basin (northern hemisphere) and Pacific basin (northwestern hemisphere). The Pacific basin is divided into two sections: east Pacific and central Pacific. However, both sections are included in the “EP” dataset.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">str</span>(EP)</a></code></pre></div>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    28547 obs. of  21 variables:
+<pre><code>## 'data.frame':    28547 obs. of  21 variables:
 ##  $ Key     : chr  &quot;EP011949&quot; &quot;EP011949&quot; &quot;EP011949&quot; &quot;EP011949&quot; ...
 ##  $ Name    : chr  &quot;UNNAMED&quot; &quot;UNNAMED&quot; &quot;UNNAMED&quot; &quot;UNNAMED&quot; ...
 ##  $ DateTime: POSIXct, format: &quot;1949-06-11 00:00:00&quot; &quot;1949-06-11 06:00:00&quot; ...
@@ -337,7 +337,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ##  $ SW64    : int  NA NA NA NA NA NA NA NA NA NA ...
 ##  $ NW64    : int  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">str</span>(AL)</a></code></pre></div>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    50911 obs. of  21 variables:
+<pre><code>## 'data.frame':    50911 obs. of  21 variables:
 ##  $ Key     : chr  &quot;AL011851&quot; &quot;AL011851&quot; &quot;AL011851&quot; &quot;AL011851&quot; ...
 ##  $ Name    : chr  &quot;UNNAMED&quot; &quot;UNNAMED&quot; &quot;UNNAMED&quot; &quot;UNNAMED&quot; ...
 ##  $ DateTime: POSIXct, format: &quot;1851-06-25 00:00:00&quot; &quot;1851-06-25 06:00:00&quot; ...

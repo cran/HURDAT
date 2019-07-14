@@ -2,14 +2,15 @@
 % Please edit documentation in R/hurdat.R
 \name{parse_hurdat}
 \alias{parse_hurdat}
-\title{parse_hurdat}
+\title{Parse HURDAT}
 \usage{
-parse_hurdat(basin)
+parse_hurdat(x)
 }
 \arguments{
-\item{basin}{character name of basin; c("AL", "EP")}
+\item{x}{A character vector.}
 }
 \description{
-Parse raw HURDAT files.
+Take a vector of lines with raw HURDAT information and convert to a
+  dataframe object.
 }
 \keyword{internal}

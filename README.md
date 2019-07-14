@@ -11,7 +11,7 @@ Status](https://img.shields.io/appveyor/ci/timtrice/HURDAT/master.svg)](https://
 [![codecov](https://codecov.io/gh/timtrice/HURDAT/branch/master/graph/badge.svg)](https://codecov.io/gh/timtrice/HURDAT)
 [![Docker Build
 Status](https://img.shields.io/docker/build/timtrice/hurdat.svg)](https://cloud.docker.com/repository/docker/timtrice/hurdat)
-[![rstudio.cloud](https://img.shields.io/badge/launch-rstudio.cloud-yellowgreen.svg)](https://rstudio.cloud/project/407354)
+[![rstudio.cloud](https://img.shields.io/badge/launch-rstudio.cloud-yellowgreen.svg)](https://rstudio.cloud/project/410741)
 
 # HURDAT
 
@@ -21,13 +21,11 @@ present it in a cleaner format.
 
 The Atlantic basin dataset covers all cyclones that have developed in
 the Atlantic Ocean. The eastern Pacific datasets cover cyclones in the
-Pacifc from the United States/Mexico coastlines to -140°W where the
+Pacific from the United States/Mexico coastlines to -140°W where the
 cyclone entered what is referred to as the central Pacific basin. The
 central Pacific basin extends westward to -180°W.
 
 ## Getting Started
-
-Please view the vignette ‘hurdat’:
 
 ``` r
 vignette("hurdat", package = "HURDAT")
