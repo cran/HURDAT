@@ -5,13 +5,13 @@ version](https://img.shields.io/badge/R%3E%3D-3.5.3-6666ff.svg)](https://cran.r-
 (pre-)release](https://img.shields.io/github/release/timtrice/HURDAT/all.svg)](https://github.com/timtrice/HURDAT/tags)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/HURDAT)](https://cran.r-project.org/package=HURDAT)
 [![Build
-Status](https://img.shields.io/travis/timtrice/HURDAT/master.svg)](https://travis-ci.org/timtrice/HURDAT)
+Status](https://img.shields.io/travis/timtrice/HURDAT/develop.svg)](https://travis-ci.org/timtrice/HURDAT)
 [![AppVeyor Build
-Status](https://img.shields.io/appveyor/ci/timtrice/HURDAT/master.svg)](https://ci.appveyor.com/project/timtrice/HURDAT)
+Status](https://img.shields.io/appveyor/ci/timtrice/HURDAT/develop.svg)](https://ci.appveyor.com/project/timtrice/HURDAT)
 [![codecov](https://codecov.io/gh/timtrice/HURDAT/branch/master/graph/badge.svg)](https://codecov.io/gh/timtrice/HURDAT)
-[![Docker Build
-Status](https://img.shields.io/docker/build/timtrice/hurdat.svg)](https://cloud.docker.com/repository/docker/timtrice/hurdat)
-[![rstudio.cloud](https://img.shields.io/badge/launch-rstudio.cloud-yellowgreen.svg)](https://rstudio.cloud/project/410741)
+[![Docker Cloud Build
+Status](https://img.shields.io/docker/cloud/build/timtrice/hurdat.svg?style=popout)](https://cloud.docker.com/repository/docker/timtrice/hurdat)
+[![rstudio.cloud](https://img.shields.io/badge/launch-rstudio.cloud-yellowgreen.svg)](https://rstudio.cloud/project/415701)
 
 # HURDAT
 

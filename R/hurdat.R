@@ -18,7 +18,7 @@
 #' In 1953, the \href{http://www.nhc.noaa.gov}{National Hurricane Center} began
 #' using female names and by 1954 the NHC would retire some names for storms of
 #' significance. Currently the
-#' \href{http://www.wmo.int/pages/prog/www/tcp/Storm-naming.html}{World
+#' \href{https://public.wmo.int/en/About-us/FAQs/faqs-tropical-cyclones/tropical-cyclone-naming}{World
 #'   Meteorological Organization}
 #' is responsible for maintaining the list of names, retiring names and
 #' assigning replacement names.
@@ -97,7 +97,6 @@ NULL
 #'
 #' @keywords internal
 audit_hurdat <- function(df) {
-
   problems <- dplyr::group_by(df, .data$Key, .data$DateTime)
 
   problems <- dplyr::count(problems)
@@ -105,7 +104,6 @@ audit_hurdat <- function(df) {
   problems <- dplyr::filter(problems, .data$n > 1)
 
   dplyr::arrange(problems, .data$n, .data$Key, .data$DateTime)
-
 }
 
 #' Get HURDAT and parse to dataframe
@@ -138,7 +136,6 @@ audit_hurdat <- function(df) {
 #' }
 #' @export
 get_hurdat <- function(basin = c("AL", "EP")) {
-
   basin <- toupper(basin)
 
   if (!all(basin %in% c("AL", "EP"))) {
@@ -163,7 +160,6 @@ get_hurdat <- function(basin = c("AL", "EP")) {
   txt <- txt[keep_lines]
 
   parse_hurdat(txt)
-
 }
 
 #' Parse HURDAT
@@ -175,7 +171,6 @@ get_hurdat <- function(basin = c("AL", "EP")) {
 #'
 #' @keywords internal
 parse_hurdat <- function(x) {
-
   hurdat <- as.data.frame(x, stringsAsFactors = FALSE)
 
   header_rows <- grep(pattern = "^[[:alpha:]]{2}[[:digit:]]{6}.+", x)
@@ -187,8 +182,8 @@ parse_hurdat <- function(x) {
     into = c("Key", "Name", "Lines"),
     regex = paste0(
       "([:alpha:]{2}[:digit:]{6}),\\s+", # Key
-      "([[:upper:][:digit:]-]+)\\s*,\\s+",      # Name
-      "([:digit:]+),"          # Number of lines that follow
+      "([[:upper:][:digit:]-]+)\\s*,\\s+", # Name
+      "([:digit:]+)," # Number of lines that follow
     ),
     remove = FALSE,
     convert = TRUE
@@ -198,7 +193,7 @@ parse_hurdat <- function(x) {
   hurdat <- tidyr::fill(data = hurdat, .data$Key, .data$Name, .data$Lines)
 
   # Remove original header rows
-  hurdat <- hurdat[-header_rows,]
+  hurdat <- hurdat[-header_rows, ]
 
   # Split storm details into variables
   hurdat <- tidyr::extract(
@@ -283,6 +278,8 @@ parse_hurdat <- function(x) {
     .data$Key, .data$Name, .data$DateTime, .data$Record:.data$Lat,
     .data$Lon, .data$Wind:.data$NW64
   )
+  
+  hurdat <- unique(hurdat)
 
   # Run audit and throw warning if any issues.
   if (nrow(audit_hurdat(hurdat)) > 0) {
@@ -298,15 +295,23 @@ parse_hurdat <- function(x) {
   # I do this before converting `DateTime` because if that field has already
   # been converted then this cleaning will generate an error,
   # >  character string is not in a standard unambiguous format
-  hurdat[hurdat == ""] <- NA
-  hurdat[hurdat == "0"] <- NA
-  hurdat[hurdat == -99] <- NA_integer_
-  hurdat[hurdat == -999] <- NA_integer_
+  hurdat <-
+    dplyr::mutate_at(
+      .tbl = hurdat,
+      .vars = dplyr::vars(
+        .data$Key:.data$Status,
+        .data$Wind:.data$NW64
+      ),
+      .funs = ~replace(
+        x = .,
+        list = . %in% c("", "0", -99, -999),
+        values = NA
+      )
+    )
 
   hurdat$DateTime <- as.POSIXct(
     strptime(hurdat$DateTime, format = "%Y-%m-%d %H:%M:%S")
   )
 
   dplyr::arrange(hurdat, .data$DateTime, .data$Key)
-
 }

@@ -1,7 +1,7 @@
 Package: HURDAT
 Type: Package
 Title: Hurricane Re-Analysis Project
-Version: 0.2.3
+Version: 0.2.3.1
 Authors@R: c(
     person("Tim", "Trice", email = "tim.trice@gmail.com", role = c("aut", "cre")), 
     person("Chris", "Landsea", email = "Chris.Landsea@noaa.gov", 
@@ -23,9 +23,9 @@ VignetteBuilder: knitr
 RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2019-07-14 15:47:47 UTC; timtrice
+Packaged: 2020-01-21 14:17:45 UTC; rstudio-user
 Author: Tim Trice [aut, cre],
   Chris Landsea [aut, dtc]
 Maintainer: Tim Trice <tim.trice@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-07-14 22:30:04 UTC
+Date/Publication: 2020-01-28 14:20:11 UTC
