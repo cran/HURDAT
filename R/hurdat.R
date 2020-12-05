@@ -15,10 +15,10 @@
 #' Cyclones were not named until 1950 and used names of the international
 #' phonetic alphabet. For example, Able, Baker, Charlie, etc.
 #'
-#' In 1953, the \href{http://www.nhc.noaa.gov}{National Hurricane Center} began
+#' In 1953, the \href{https://www.nhc.noaa.gov}{National Hurricane Center} began
 #' using female names and by 1954 the NHC would retire some names for storms of
 #' significance. Currently the
-#' \href{https://public.wmo.int/en/About-us/FAQs/faqs-tropical-cyclones/tropical-cyclone-naming}{World
+#' \href{https://public.wmo.int/en/our-mandate/focus-areas/natural-hazards-and-disaster-risk-reduction/tropical-cyclones/Naming}{World
 #'   Meteorological Organization}
 #' is responsible for maintaining the list of names, retiring names and
 #' assigning replacement names.
@@ -68,7 +68,7 @@
 #'
 #' Errors in the raw data may also be reported to Chris Landsea or the National
 #' Hurricane Center Best Track Change Committee
-#' \href{http://www.aoml.noaa.gov/hrd/hurdat/submit_re-analysis.html}{as
+#' \href{https://www.aoml.noaa.gov/hrd/hurdat/submit_re-analysis.html}{as
 #'   explained on the HRD website}.
 #'
 #' @docType package
@@ -112,14 +112,14 @@ audit_hurdat <- function(df) {
 #'   (EP) basins (northwestern hemisphere)
 #'
 #' @details Raw text files \emph{should} be found at
-#'   \url{http://www.nhc.noaa.gov/data/hurdat/} as of this writing. The
+#'   \url{https://www.nhc.noaa.gov/data/hurdat/} as of this writing. The
 #'  codebooks are listed below.
 #'
 #' @seealso Atlantic codebook:
-#'     \url{http://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atlantic.pdf}
+#'     \url{https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atlantic.pdf}
 #'
 #' @seealso NE/NC Pacific codebook:
-#'     \url{http://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atlantic.pdf}
+#'     \url{https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-atlantic.pdf}
 #'
 #' @param basin AL or EP. Default is both.
 #'
@@ -181,9 +181,9 @@ parse_hurdat <- function(x) {
     col = "x",
     into = c("Key", "Name", "Lines"),
     regex = paste0(
-      "([:alpha:]{2}[:digit:]{6}),\\s+", # Key
+      "([[:alpha:]]{2}[[:digit:]]{6}),\\s+", # Key
       "([[:upper:][:digit:]-]+)\\s*,\\s+", # Name
-      "([:digit:]+)," # Number of lines that follow
+      "([[:digit:]]+)," # Number of lines that follow
     ),
     remove = FALSE,
     convert = TRUE
@@ -227,17 +227,17 @@ parse_hurdat <- function(x) {
       "NW64"
     ),
     regex = paste0(
-      "^([:digit:]{4})", # Year
-      "([:digit:]{2})", # Month
-      "([:digit:]{2}),\\s+", # Date
-      "([:digit:]{2})", # Hour
-      "([:digit:]{2}),\\s+", # Minute
-      "([:alpha:]*),\\s+", # Record
-      "([:alpha:]{2}),\\s+", # Status
-      "([:digit:]{1,2}\\.[:digit:]{1})", # Latitude
-      "([:alpha:]{1}),\\s+", # Hemisphere
-      "([:digit:]{1,3}\\.[:digit:]{1})", # Longitude
-      "([:alpha:]{1}),\\s+", # Hemisphere
+      "^([[:digit:]]{4})", # Year
+      "([[:digit:]]{2})", # Month
+      "([[:digit:]]{2}),\\s+", # Date
+      "([[:digit:]]{2})", # Hour
+      "([[:digit:]]{2}),\\s+", # Minute
+      "([[:alpha:]]*),\\s+", # Record
+      "([[:alpha:]]{2}),\\s+", # Status
+      "([[:digit:]]{1,2}\\.[[:digit:]]{1})", # Latitude
+      "([[:alpha:]]{1}),\\s+", # Hemisphere
+      "([[:digit:]]{1,3}\\.[[:digit:]]{1})", # Longitude
+      "([[:alpha:]]{1}),\\s+", # Hemisphere
       "([[:digit:]-]+),\\s+", # Wind
       "([[:digit:]-]+),\\s+", #
       "([[:digit:]-]+),\\s+", #
@@ -278,7 +278,7 @@ parse_hurdat <- function(x) {
     .data$Key, .data$Name, .data$DateTime, .data$Record:.data$Lat,
     .data$Lon, .data$Wind:.data$NW64
   )
-  
+
   hurdat <- unique(hurdat)
 
   # Run audit and throw warning if any issues.
